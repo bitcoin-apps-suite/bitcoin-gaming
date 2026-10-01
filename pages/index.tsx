@@ -1,18 +1,44 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Head from 'next/head'
+import dynamic from 'next/dynamic'
+import { useMountedCompactShell } from '../components/mobile/shell'
+import { CWIUser, getStoredCWIUser } from '../components/mobile/cwi'
+
+// Client-only: the phone app uses window, localStorage and touch APIs.
+const MobileApp = dynamic(() => import('../components/mobile/MobileApp'), { ssr: false })
 
 export default function Home() {
+  const compact = useMountedCompactShell()
+  // Restore a bWallet user. Server: null; nothing user-dependent renders before mount.
+  const [user, setUser] = useState<CWIUser | null>(() => (typeof window === 'undefined' ? null : getStoredCWIUser()))
+  const handleLogin = useCallback((u: CWIUser) => setUser(u), [])
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('bw-mobile-app', compact === true)
+  }, [compact])
+
+  const head = (
+    <Head>
+      <title>Bitcoin Gaming - The Future of Gaming</title>
+      <meta name="description" content="Revolutionary Bitcoin-powered gaming platform" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      <meta name="theme-color" content="#000000" />
+      <link rel="icon" href="/favicon.ico" />
+    </Head>
+  )
+
+  // Not mounted yet: render neither variant, so the server HTML never holds
+  // the desktop page for a phone (no flash) and hydration matches.
+  if (compact === null) return <>{head}<div style={{ minHeight: '100vh', background: '#000' }} /></>
+  if (compact) return <>{head}<MobileApp appName="bGames" user={user} onLogin={handleLogin} /></>
+  return <>{head}<DesktopHome /></>
+}
+
+function DesktopHome() {
   const [isHovered, setIsHovered] = useState(false)
 
   return (
     <>
-      <Head>
-        <title>Bitcoin Gaming - The Future of Gaming</title>
-        <meta name="description" content="Revolutionary Bitcoin-powered gaming platform" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main style={{
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #f7931a 0%, #ff6b35 100%)',
