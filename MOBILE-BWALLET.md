@@ -69,7 +69,19 @@ At 390x844 with UA `... bWallet/1 YoursWalletMobile/1`:
 dock, and every visible button is at least 44px. At 1440px the page should
 match `main` pixel for pixel.
 
-## Notes for this repo
+## Notes for this repo (bGames)
 
-- Next pages router stub; added pages/_app.tsx with MobileShellInit + CSS. No dock/banner existed.
-- TODO(CWI): no login.
+- Next.js pages router. `pages/index.tsx` uses `useMountedCompactShell()` (in
+  `components/mobile/shell.ts`): `null` on the server and first client render,
+  so the static HTML holds neither the desktop page nor the phone app; after
+  mount it renders `MobileApp` (compact / in-wallet) or the desktop landing page.
+  The repo has no dock, banner, dev sidebar or footer to gate.
+- Phone app: `components/mobile/MobileApp.tsx` + `mobile-app.css` (global CSS,
+  imported in `pages/_app.tsx`). Identity colour purple `#a855f7`, gold `#F5B800`.
+- Games (`components/mobile/games.ts`, pure logic, unit-tested in `tests/`):
+  Snake (swipe, d-pad or arrow keys) and 2048 (swipe, d-pad or arrow keys).
+  High scores are stored per device in localStorage (`bgames_highscores`).
+- Sign-in: silent `window.CWI` sign-in, public key only; restored from
+  `getStoredCWIUser()`. Desktop has no sign-in (it is a landing page).
+- Checks: `pnpm lint` (eslint 9 flat config, `--max-warnings=0`),
+  `pnpm typecheck` (strict), `pnpm test` (vitest), `pnpm build`. Dev port 4102.

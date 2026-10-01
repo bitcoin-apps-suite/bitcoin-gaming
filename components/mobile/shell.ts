@@ -16,6 +16,8 @@ export const COMPACT_MAX_WIDTH = 768;
 export function isInWallet(): boolean {
   if (typeof navigator === 'undefined') return false;
   if (/\bbWallet\//.test(navigator.userAgent)) return true;
+  // bWallet injects a BRC-100 wallet as window.CWI before page scripts run.
+  if (typeof window !== 'undefined' && (window as unknown as { CWI?: unknown }).CWI) return true;
   // Allow forcing in-wallet mode for testing: ?inwallet=1
   try {
     return new URLSearchParams(window.location.search).get('inwallet') === '1';
@@ -47,6 +49,22 @@ export function useCompactShell(): boolean {
     const onResize = () => setCompact(isCompact());
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
+  }, []);
+  return compact;
+}
+
+/**
+ * Next.js variant: null until mounted (server render and first client render
+ * match), then the real compact flag. Render no chrome-dependent branch while
+ * it is null, so the server HTML never contains desktop chrome for phones.
+ */
+export function useMountedCompactShell(): boolean | null {
+  const [compact, setCompact] = useState<boolean | null>(null);
+  useEffect(() => {
+    const update = () => setCompact(isCompact());
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
   }, []);
   return compact;
 }
