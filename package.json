@@ -11,6 +11,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@bsv/sdk": "^3.0.0",
     "next": "16.1.6",
     "react": "^18",
     "react-dom": "^18"

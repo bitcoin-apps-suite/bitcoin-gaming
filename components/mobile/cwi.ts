@@ -1,3 +1,5 @@
+import { WalletClient } from '@bsv/sdk';
+
 /**
  * BRC-100 sign-in via window.CWI (injected by bWallet / Yours Wallet Mobile).
  * No keys are ever handled here: we only ask the wallet for the user's
@@ -20,9 +22,17 @@ interface CWILike {
   waitForAuthentication?: (args?: object) => Promise<{ authenticated: boolean }>;
 }
 
+let framed: CWILike | null = null;
+
+/**
+ * The wallet: bWallet's in-app browser injects window.CWI; inside bWallet's Apps tab the page is an
+ * iframe with no injection, and the wallet answers BRC-100 over postMessage (XDM) instead.
+ */
 export function getCWI(): CWILike | null {
   const w = window as unknown as { CWI?: CWILike };
-  return w.CWI && typeof w.CWI.getPublicKey === 'function' ? w.CWI : null;
+  if (w.CWI && typeof w.CWI.getPublicKey === 'function') return w.CWI;
+  if (window.self !== window.top) return (framed ??= new WalletClient('XDM', window.location.host) as unknown as CWILike);
+  return null;
 }
 
 export function hasCWI(): boolean {

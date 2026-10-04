@@ -24,6 +24,12 @@ const GAMES: { id: GameId; name: string; icon: string; blurb: string }[] = [
   { id: '2048', name: '2048', icon: '▦', blurb: 'Merge tiles to reach 2048' },
 ];
 
+/** Chain games on TokenBlaster.lol: open in this same frame, so they run with your wallet too. */
+const CHAIN_GAMES: { name: string; img: string; blurb: string; href: string }[] = [
+  { name: 'Arena', img: 'https://www.tokenblaster.lol/arcade/arena.jpg', blurb: 'Load the tokens in your wallet and fire them. Every bullet is a real transaction.', href: 'https://www.tokenblaster.lol/arena' },
+  { name: 'Chain Frogger', img: 'https://www.tokenblaster.lol/arcade/frogger.jpg', blurb: 'Cross a 3D city where every vehicle is a live mainnet transaction.', href: 'https://www.tokenblaster.lol/arcade/frogger' },
+];
+
 function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
   return Promise.race([p, new Promise<T>((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))]);
 }
@@ -249,6 +255,22 @@ export default function MobileApp({ appName, user, onLogin }: MobileAppProps) {
             ))}
           </ul>
           <p className="bgm-note">Scores are kept on this device. Swipe or use the pad to play.</p>
+          <h2 className="bgm-section">Chain games</h2>
+          <ul className="bgm-cards">
+            {CHAIN_GAMES.map(c => (
+              <li key={c.name}>
+                <a className="bgm-card" href={c.href} data-testid={`chain-${c.name}`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={c.img} alt="" className="bgm-card-img" loading="lazy" />
+                  <span className="bgm-card-text">
+                    <span className="bgm-list-title">{c.name}</span>
+                    <span className="bgm-list-sub">{c.blurb}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="bgm-note">Chain games open from TokenBlaster.lol, right here inside bWallet.</p>
         </main>
       ) : (
         <main className="bgm-game">
