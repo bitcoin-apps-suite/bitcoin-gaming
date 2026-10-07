@@ -24,10 +24,42 @@ const GAMES: { id: GameId; name: string; icon: string; blurb: string }[] = [
   { id: '2048', name: '2048', icon: '▦', blurb: 'Merge tiles to reach 2048' },
 ];
 
-/** Chain games on TokenBlaster.lol: open in this same frame, so they run with your wallet too. */
+/** Every TokenBlaster.lol arcade game (tokenblaster.lol/arcade, 7 Oct 2026): open in this same frame, so they run with your wallet too. */
 const CHAIN_GAMES: { name: string; img: string; blurb: string; href: string }[] = [
-  { name: 'Arena', img: 'https://www.tokenblaster.lol/arcade/arena.jpg', blurb: 'Load the tokens in your wallet and fire them. Every bullet is a real transaction.', href: 'https://www.tokenblaster.lol/arena' },
-  { name: 'Chain Frogger', img: 'https://www.tokenblaster.lol/arcade/frogger.jpg', blurb: 'Cross a 3D city where every vehicle is a live mainnet transaction.', href: 'https://www.tokenblaster.lol/arcade/frogger' },
+  { name: 'Double-O Satoshi', img: 'https://www.tokenblaster.lol/arcade/doubleo.jpg', blurb: 'Spy shooter: every bullet is a token on chain', href: 'https://www.tokenblaster.lol/arcade/doubleosatoshi' },
+  { name: 'BSVGun', img: 'https://www.tokenblaster.lol/arcade/bsvgun.jpg', blurb: '3D shooting range where the targets are the live chain', href: 'https://www.tokenblaster.lol/arcade/bsvgun' },
+  { name: 'Arena', img: 'https://www.tokenblaster.lol/arcade/arena.jpg', blurb: 'DOOM-style maze: fire the tokens in your wallet', href: 'https://www.tokenblaster.lol/arena' },
+  { name: 'Chain Frogger', img: 'https://www.tokenblaster.lol/arcade/frogger.jpg', blurb: 'Cross a 3D city of live mainnet transactions', href: 'https://www.tokenblaster.lol/arcade/frogger' },
+  { name: 'Block Hopper', img: 'https://www.tokenblaster.lol/arcade/hopper.jpg', blurb: 'Side-scroller where the level is the live chain', href: 'https://www.tokenblaster.lol/arcade/hopper' },
+  { name: 'Mempool Invaders', img: 'https://www.tokenblaster.lol/arcade/invaders.jpg', blurb: '3D shooter where every ship is a live transaction', href: 'https://www.tokenblaster.lol/arcade/invaders' },
+  { name: 'Kweg\'s Expedition', img: 'https://www.tokenblaster.lol/arcade/kweg.jpg', blurb: 'Sub through the chain hunting hidden $KWEG', href: 'https://www.tokenblaster.lol/arcade/kweg' },
+  { name: 'Token Snake', img: 'https://www.tokenblaster.lol/arcade/snake.jpg', blurb: 'Neon 3D snake: every bite is a real transaction', href: 'https://www.tokenblaster.lol/arcade/snake' },
+  { name: 'Satoshi City', img: 'https://www.tokenblaster.lol/arcade/city.jpg', blurb: 'Open-world city where every car is a live tx', href: 'https://www.tokenblaster.lol/arcade/city' },
+  { name: 'NPG: Card Battle', img: 'https://www.tokenblaster.lol/arcade/npg-cards.jpg', blurb: 'Ninja Punk Girls card battle, AI or online', href: 'https://www.tokenblaster.lol/arcade/npg-cards' },
+  { name: 'NPG: Erobot Uprising', img: 'https://www.tokenblaster.lol/arcade/npg-runner.jpg', blurb: 'Ninja Punk Girls platformer, three bosses', href: 'https://www.tokenblaster.lol/arcade/npg-runner' },
+  { name: 'Token Rally', img: 'https://www.tokenblaster.lol/arcade/rally.jpg', blurb: 'Rally racing against live chain traffic', href: 'https://www.tokenblaster.lol/arcade/rally' },
+  { name: 'Sat Stack 2048', img: 'https://www.tokenblaster.lol/arcade/2048.jpg', blurb: 'Merge sat stacks up to a 1 BSV tile', href: 'https://www.tokenblaster.lol/arcade/2048' },
+  { name: 'Highway 21M', img: 'https://www.tokenblaster.lol/arcade/highway21.jpg', blurb: 'OutRun-style racer through live token moves', href: 'https://www.tokenblaster.lol/arcade/highway21' },
+  { name: 'Coin Pop', img: 'https://www.tokenblaster.lol/arcade/bubbo-bubbo.jpg', blurb: 'Bubble shooter with token coins', href: 'https://www.tokenblaster.lol/arcade/bubbo-bubbo' },
+  { name: 'Token Potions', img: 'https://www.tokenblaster.lol/arcade/puzzling-potions.jpg', blurb: 'Match-3 against a 60-second clock', href: 'https://www.tokenblaster.lol/arcade/puzzling-potions' },
+  { name: 'bRacer', img: 'https://www.tokenblaster.lol/arcade/bracer.jpg', blurb: 'Anti-gravity racing at 700 km/h', href: 'https://www.tokenblaster.lol/arcade/bracer' },
+];
+
+/** More games playable now on BSV (URLs checked 7 Oct 2026; same list as bwalletx.com/games). */
+const MORE_GAMES: { name: string; blurb: string; href: string }[] = [
+  { name: 'Ninja Punk Girls', blurb: 'Collect and battle cyberpunk NFT cards', href: 'https://ninjapunkgirls.online' },
+  { name: 'Satoshi Pong', blurb: 'Pong where every point is paid on chain', href: 'https://insertarcade.com/' },
+  { name: 'FPSV', blurb: 'First-person arena shooter on BSV', href: 'https://insertarcade.com/' },
+  { name: 'CHESSV', blurb: 'Chess on a clock on BSV', href: 'https://insertarcade.com/' },
+  { name: 'Midnight Pass', blurb: 'From the Paiybit arcade', href: 'https://paiybit.com/paiybit/arcade' },
+  { name: 'Haste Arcade', blurb: 'Arcade games with leaderboard payouts', href: 'https://hastearcade.com' },
+  { name: '5TARS', blurb: 'Football prediction and fantasy game', href: 'https://5tars.io' },
+  { name: 'Bitcoin vs. Crypto', blurb: 'HTML5 arcade shooter', href: 'https://bitcoinsv.itch.io/bitcoin-versus-crypto' },
+  { name: 'PixelWar', blurb: 'Collaborative pixel art canvas', href: 'https://pixelwar.click' },
+  { name: 'Number Cruncher 3D', blurb: 'Solve 3D math puzzles', href: 'https://numbercrunchermath.com' },
+  { name: 'Ageless Republic', blurb: 'Open-world RPG', href: 'https://agelessrepublic.com/' },
+  { name: 'HyperTypist', blurb: 'Typing speed, records saved on chain', href: 'https://hypertypist.com/' },
+  { name: 'PeerJump', blurb: 'How high can you climb?', href: 'https://peerjump.fun/' },
 ];
 
 function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
@@ -271,6 +303,21 @@ export default function MobileApp({ appName, user, onLogin }: MobileAppProps) {
             ))}
           </ul>
           <p className="bgm-note">Chain games open from TokenBlaster.lol, right here inside bWallet.</p>
+          <h2 className="bgm-section">More BSV games</h2>
+          <ul className="bgm-list">
+            {MORE_GAMES.map(m => (
+              <li key={m.name}>
+                <a className="bgm-list-main" href={m.href} data-testid={`more-${m.name}`}>
+                  <span className="bgm-list-icon">{m.name[0]}</span>
+                  <span className="bgm-list-text">
+                    <span className="bgm-list-title">{m.name}</span>
+                    <span className="bgm-list-sub">{m.blurb}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="bgm-note">Made by other teams on Bitcoin SV. Some spend real tokens or pay out money: play with small amounts.</p>
         </main>
       ) : (
         <main className="bgm-game">

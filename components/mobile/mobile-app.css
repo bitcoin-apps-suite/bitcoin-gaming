@@ -78,3 +78,4 @@ html.bw-mobile-app, html.bw-mobile-app body { overflow: hidden; overscroll-behav
 .bgm-card:active { transform: scale(0.99); }
 .bgm-card-img { display: block; width: 100%; aspect-ratio: 1200 / 630; object-fit: cover; }
 .bgm-card-text { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px 12px; }
+a.bgm-list-main { color: inherit; text-decoration: none; }
