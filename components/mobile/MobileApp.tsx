@@ -8,6 +8,7 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { hasCWI, signInWithCWI, CWIUser } from './cwi';
+import { tip, TIP_ADDRESS, TIP_SATS } from '../../lib/bwallet';
 import {
   Board, Dir, GameId, SnakeState, canMove, getHighScores, move2048, new2048, addTile,
   newSnake, recordScore, steer, swipeDir, tickSnake,
@@ -249,6 +250,28 @@ export default function MobileApp({ appName, user, onLogin }: MobileAppProps) {
     }
   };
 
+  const [tipping, setTipping] = useState(false);
+  const sendTip = async (sats: number) => {
+    setTipping(true);
+    try {
+      await tip(sats);
+      flash('Thanks for the tip!');
+    } catch (err) {
+      flash(err instanceof Error && /not set up/.test(err.message) ? err.message : 'Tip not sent');
+    } finally {
+      setTipping(false);
+    }
+  };
+  const tipRow = TIP_ADDRESS ? (
+    <div className="bgm-tips" data-testid="tips">
+      {TIP_SATS.map(s => (
+        <button key={s} className="bgm-primary" disabled={tipping} onClick={() => sendTip(s)}>
+          Tip {s.toLocaleString()} sats
+        </button>
+      ))}
+    </div>
+  ) : null;
+
   const current = GAMES.find(x => x.id === game);
 
   return (
@@ -297,6 +320,7 @@ export default function MobileApp({ appName, user, onLogin }: MobileAppProps) {
             ))}
           </ul>
           <p className="bgm-note">Scores are kept on this device. Swipe or use the pad to play.</p>
+          {tipRow && (<><h2 className="bgm-section">Tip the makers</h2>{tipRow}<p className="bgm-note">You approve every tip in your wallet.</p></>)}
           <h2 className="bgm-section">Chain games</h2>
           <ul className="bgm-cards">
             {CHAIN_GAMES.map(c => (
@@ -340,6 +364,7 @@ export default function MobileApp({ appName, user, onLogin }: MobileAppProps) {
                 <div className="bgm-over-title">Game over</div>
                 <div>Score {live.score} · Best {best[game]}</div>
                 <button className="bgm-primary" onClick={restart}>Play again</button>
+                {tipRow}
               </div>
             </div>
           )}
