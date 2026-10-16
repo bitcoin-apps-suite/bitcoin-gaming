@@ -45,8 +45,8 @@ function toUser(publicKey: string): CWIUser {
 }
 
 export async function signInWithCWI(): Promise<CWIUser> {
-  const cwi = getCWI();
-  if (!cwi) throw new Error('bWallet (window.CWI) not available');
+  // Outside bWalletX: WalletClient auto mode finds window.CWI or a local BRC-100 wallet (localhost 3321).
+  const cwi = getCWI() ?? (new WalletClient('auto', window.location.host) as unknown as CWILike);
   if (cwi.waitForAuthentication) await cwi.waitForAuthentication({});
   const { publicKey } = await cwi.getPublicKey({ identityKey: true });
   const user = toUser(publicKey);
