@@ -267,7 +267,17 @@ export default function MobileApp({ appName, user, onLogin }: MobileAppProps) {
           <span className="bgm-user" title={user.publicKey} data-testid="user">{user.handle}</span>
         ) : signingIn ? (
           <span className="bgm-user">Signing in…</span>
-        ) : null}
+        ) : (
+          <button
+            className="bgm-user"
+            style={{ background: '#e6b325', color: '#000', border: 0, borderRadius: 999, padding: '4px 10px', fontWeight: 600 }}
+            onClick={() => {
+              signInWithCWI().then(onLogin).catch(() => flash('Open bGames in bWalletX to sign in'));
+            }}
+          >
+            Sign in
+          </button>
+        )}
       </header>
 
       {!game ? (
